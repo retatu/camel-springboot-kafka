@@ -19,21 +19,21 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/localDB
     username: postgres
-    password: postgres
+    password: root
   mail:
     host: smtp.gmail.com
     port: 587
     username: xyz@gmail.com
     password:
-    properties.mail.smtp.auth:  true
+    properties.mail.smtp.auth: true
     properties.mail.smtp.starttls.enable: true
-
-mail.smtp.starttls.enable: true
+    smtp.starttls.enable: true
 
 mailto: xyz@gmail.com
 mailFrom: xyz@gmail.com
 
-message:   Hello from MOCK Profile
+message: Hello from MOCK Profile
+
 fromRoute: direct:input
 toRoute: mock:output
 healthRoute: direct:health
@@ -46,20 +46,22 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/localDB
     username: postgres
-    password: postgres
+    password: root
   mail:
     host: smtp.gmail.com
     port: 587
-    username: xyz@gmail.com
+    username: mrehbein45@gmail.com
     password:
-    properties.mail.smtp.auth:  true
+    properties.mail.smtp.auth: true
     properties.mail.smtp.starttls.enable: true
 
-mailto: xyz@gmail.com
-mailFrom: xyz@gmail.com
-message:   Hello from DEV Profile
-fromRoute: timer:health?period=10s
-toRoute:  log:?level=INFO&showBody=true
+mailto: mrehbein45@gmail.com
+mailFrom: mrehbein45@gmail.com
+
+message: Hello from DEV Profile
+
+fromRoute: kafka:inputItemTopic?brokers=localhost:9092&groupId=itemDev&autoOffsetReset=earliest&consumersCount=1
+toRoute: log:?level=INFO&showBody=true
 healthRoute: timer:health?period=10s
 
 ---
@@ -70,21 +72,22 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/localDB
     username: postgres
-    password: postgres
+    password: root
   mail:
     host: smtp.gmail.com
     port: 587
     username: xyz@gmail.com
     password:
-    properties.mail.smtp.auth:  true
+    properties.mail.smtp.auth: true
     properties.mail.smtp.starttls.enable: true
 
 mailto: xyz@gmail.com
 mailFrom: xyz@gmail.com
-message:    Hello from STAGE Profile
 
-fromRoute: timer:health?period=10s
-toRoute:  log:?level=INFO&showBody=true
+message: Hello from STAGE Profile
+
+fromRoute: kafka:inputItemTopic?brokers=localhost:9092&groupId=itemDev&autoOffsetReset=earliest&consumersCount=1
+toRoute: log:?level=INFO&showBody=true
 healthRoute: timer:health?period=10s
 
 
@@ -96,22 +99,22 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/localDB
     username: postgres
-    password: postgres
+    password: root
   mail:
     host: smtp.gmail.com
     port: 587
     username: xyz@gmail.com
     password:
-    properties.mail.smtp.auth:  true
+    properties.mail.smtp.auth: true
     properties.mail.smtp.starttls.enable: true
 
 mailto: xyz@gmail.com
 mailFrom: xyz@gmail.com
 
-message:    Hello from PROD Profile
+message: Hello from PROD Profile
 
-fromRoute: timer:health?period=10s
-toRoute:  log:?level=INFO&showBody=true
+fromRoute: kafka:inputItemTopic?brokers=localhost:9092&groupId=itemDev&autoOffsetReset=earliest&consumersCount=1
+toRoute: log:?level=INFO&showBody=true
 healthRoute: timer:health?period=10s
 
 

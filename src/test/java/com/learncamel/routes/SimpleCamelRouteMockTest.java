@@ -1,28 +1,17 @@
 package com.learncamel.routes;
 
-import com.learncamel.exception.DataException;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.test.spring.CamelSpringBootRunner;
 import org.apache.camel.test.spring.DisableJmx;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * Created by z001qgd on 1/13/18.
@@ -51,7 +40,7 @@ public class SimpleCamelRouteMockTest extends CamelTestSupport{
 
     @Override
     protected RouteBuilder createRouteBuilder(){
-        return new SimpleCamelRoute();
+        return new KafkaRoute();
     }
 
     @Autowired

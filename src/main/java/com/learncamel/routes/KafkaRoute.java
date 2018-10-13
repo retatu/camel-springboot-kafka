@@ -16,7 +16,7 @@ import javax.sql.DataSource;
  * Created by z001qgd on 1/3/18.
  */
 @Component
-public class SimpleCamelRoute extends RouteBuilder{
+public class KafkaRoute extends RouteBuilder{
 
     @Autowired
     Environment environment;
@@ -40,7 +40,7 @@ public class SimpleCamelRoute extends RouteBuilder{
 
 
         from("{{fromRoute}}")
-                    .log("Current Environment is "+ environment.getProperty("message"))
+                    .log("Read message from kafka: ${body}")
                 .to("{{toRoute}}");
 
         }
