@@ -1,9 +1,11 @@
 package com.learncamel.routes;
 
 import com.learncamel.alert.MailProcessor;
+import com.learncamel.domain.Item;
 import com.learncamel.exception.DataException;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.gson.GsonDataFormat;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,7 +33,6 @@ public class KafkaRoute extends RouteBuilder{
 
     @Override
     public void configure() throws Exception {
-
         onException(PSQLException.class).log(LoggingLevel.ERROR,"PSQLException in the route ${body}")
                 .maximumRedeliveries(3).redeliveryDelay(3000).backOffMultiplier(2).retryAttemptedLogLevel(LoggingLevel.ERROR);
 
@@ -39,9 +40,13 @@ public class KafkaRoute extends RouteBuilder{
                 .process(mailProcessor);
 
 
-        from("{{fromRoute}}")
-                    .log("Read message from kafka: ${body}")
-                .to("{{toRoute}}");
+        GsonDataFormat itemFormat = new GsonDataFormat(Item.class);
 
-        }
+
+        from("{{fromRoute}}")
+            .log("Read message from kafka: ${body}")
+            .unmarshal(itemFormat)
+            .log("UnMarshalled message is: ${body}")
+        .to("{{toRoute}}");
+    }
 }
