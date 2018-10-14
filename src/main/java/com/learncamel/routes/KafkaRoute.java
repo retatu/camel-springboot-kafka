@@ -3,7 +3,9 @@ package com.learncamel.routes;
 import com.learncamel.alert.MailProcessor;
 import com.learncamel.domain.Item;
 import com.learncamel.exception.DataException;
+import com.learncamel.processor.ValidateDateProcessor;
 import org.apache.camel.LoggingLevel;
+import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.gson.GsonDataFormat;
 import org.postgresql.util.PSQLException;
@@ -30,14 +32,22 @@ public class KafkaRoute extends RouteBuilder{
     @Autowired
     MailProcessor mailProcessor;
 
+    @Autowired
+    ValidateDateProcessor validateDateProcessor;
+
 
     @Override
     public void configure() throws Exception {
+        Predicate isNotMock = header("env").isNotEqualTo("mock");
+
         onException(PSQLException.class).log(LoggingLevel.ERROR,"PSQLException in the route ${body}")
                 .maximumRedeliveries(3).redeliveryDelay(3000).backOffMultiplier(2).retryAttemptedLogLevel(LoggingLevel.ERROR);
 
         onException(DataException.class,RuntimeException.class).log(LoggingLevel.ERROR, "DataException in the route ${body}")
-                .process(mailProcessor);
+                .choice().when(isNotMock)
+                    .process(mailProcessor)
+                .end()
+                .to("{{errorRoute}}");
 
 
         GsonDataFormat itemFormat = new GsonDataFormat(Item.class);
@@ -47,6 +57,7 @@ public class KafkaRoute extends RouteBuilder{
             .log("Read message from kafka: ${body}")
             .unmarshal(itemFormat)
             .log("UnMarshalled message is: ${body}")
+            .process(validateDateProcessor)
         .to("{{toRoute}}");
     }
 }

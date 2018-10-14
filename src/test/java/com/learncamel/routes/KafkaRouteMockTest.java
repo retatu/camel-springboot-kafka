@@ -63,4 +63,13 @@ public class KafkaRouteMockTest extends CamelTestSupport{
         assertEquals("100", item.getSku());
     }
 
+    @Test(expected = CamelExecutionException.class)
+    public void unMarshalTest_Error(){
+        String input = "{\"transactionType\":\"ADD\", \"sku\":\"\", \"itemDescription\":\"SamsungTV\", \"price\":\"500.00\"}";
+
+        Item item = (Item) producerTemplate.requestBodyAndHeader(environment.getProperty("fromRoute"), input, "env", "mock");
+
+        System.out.println("Items: "+item);
+    }
+
 }

@@ -37,6 +37,7 @@ message: Hello from MOCK Profile
 fromRoute: direct:input
 toRoute: mock:output
 healthRoute: direct:health
+errorRoute: mock:errorOutput
 
 ---
 
@@ -63,6 +64,7 @@ message: Hello from DEV Profile
 fromRoute: kafka:inputItemTopic?brokers=localhost:9092&groupId=itemDev&autoOffsetReset=earliest&consumersCount=1
 toRoute: log:?level=INFO&showBody=true
 healthRoute: timer:health?period=10s
+errorRoute: kafka:errorTopic?brokers=localhost:9092
 
 ---
 
@@ -89,6 +91,7 @@ message: Hello from STAGE Profile
 fromRoute: kafka:inputItemTopic?brokers=localhost:9092&groupId=itemDev&autoOffsetReset=earliest&consumersCount=1
 toRoute: log:?level=INFO&showBody=true
 healthRoute: timer:health?period=10s
+errorRoute: kafka:errorTopic?brokers=localhost:9092
 
 
 ---
@@ -116,6 +119,7 @@ message: Hello from PROD Profile
 fromRoute: direct:input
 toRoute: log:?level=INFO&showBody=true
 healthRoute: timer:health?period=10s
+errorRoute: kafka:errorTopic?brokers=localhost:9092
 
 
 ---
